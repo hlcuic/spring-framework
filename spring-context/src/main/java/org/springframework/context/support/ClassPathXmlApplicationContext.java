@@ -123,6 +123,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 		this(configLocations, refresh, null);
 	}
 
+
 	/**
 	 * Create a new ClassPathXmlApplicationContext with the given parent,
 	 * loading the definitions from the given XML files.
@@ -139,12 +140,13 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 			throws BeansException {
 
 		super(parent);
+		// 初始化配置文件xml的位置（AbstractRefreshableConfigApplicationContext）
 		setConfigLocations(configLocations);
 		if (refresh) {
+			// spring容器启动的主流程
 			refresh();
 		}
 	}
-
 
 	/**
 	 * Create a new ClassPathXmlApplicationContext, loading the definitions
