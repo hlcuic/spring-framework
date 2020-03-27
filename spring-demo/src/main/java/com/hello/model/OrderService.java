@@ -3,7 +3,7 @@ package com.hello.model;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Component
+//@Component
 public class OrderService {
 
 	private String orderId = "order1";
