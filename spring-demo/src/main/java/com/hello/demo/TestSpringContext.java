@@ -22,5 +22,12 @@ public class TestSpringContext {
 		User user = (User)context.getBean("hello");
 		System.out.println(user);
 
+		Child child = (Child)context.getBean("child");
+		System.out.println("child: "+child);
+
+		context.getBean(TestAutowiredModel.class).print();
+
+		context.getBean("myFactoryBeanDemo");
+
 	}
 }

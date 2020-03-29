@@ -25,7 +25,7 @@
 	<bean id="person" name="person1,person2,person3" class="com.hello.model.Person" p:id="1234" p:name="tomcat"/>
 
 	<!--构造器注入-->
-	<bean id="student1" class="com.hello.model.Student" c:_0="300" c:_1="400">
+	<bean id="student1" class="com.hello.model.Student" c:_0="300" c:_1="400" primary="true">
 		<!--
 		<constructor-arg index="0" value="100"/>
 		<constructor-arg index="1" value="200"/>
