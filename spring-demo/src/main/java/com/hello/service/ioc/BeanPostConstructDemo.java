@@ -1,4 +1,4 @@
-package com.hello.service;
+package com.hello.service.ioc;
 
 import org.springframework.stereotype.Component;
 

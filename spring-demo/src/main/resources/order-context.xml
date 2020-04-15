@@ -16,4 +16,8 @@
 	<!--autowired属性 no 不自动装配， byName 按照名称自动装配  byType 按照类型自动装配 按照类型自动装配时，可以辅助使用Qualifier-->
 	<bean id="testAutowired" class="com.hello.model.TestAutowiredModel" autowire="byType"/>
 
+
+	<bean id="testDependsonModel" class="com.hello.model.TestDependsonModel" depends-on="child"/>
+
+
 </beans>

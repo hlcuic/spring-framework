@@ -1,4 +1,4 @@
-package com.hello.service;
+package com.hello.service.ioc;
 
 import com.hello.model.User;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

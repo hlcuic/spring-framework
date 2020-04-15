@@ -1,8 +1,11 @@
 package com.hello.demo;
 
 import com.hello.model.*;
+import com.hello.service.aop.TestAopService;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+@EnableAspectJAutoProxy
 public class TestSpringContext {
 	public static void main(String[] args) {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
@@ -28,6 +31,9 @@ public class TestSpringContext {
 		context.getBean(TestAutowiredModel.class).print();
 
 		context.getBean("myFactoryBeanDemo");
+
+		TestAopService testAopService = context.getBean(TestAopService.class);
+		testAopService.test();
 
 	}
 }

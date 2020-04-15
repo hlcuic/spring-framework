@@ -1,1 +1,1 @@
-http\://www.lexueba.com/schema/user=com.hello.service.MyNamespaceHandler
+http\://www.lexueba.com/schema/user=com.hello.service.ioc.MyNamespaceHandler

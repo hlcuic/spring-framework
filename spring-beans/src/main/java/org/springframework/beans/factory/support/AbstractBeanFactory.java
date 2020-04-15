@@ -298,6 +298,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
+				// 保证在当前bean初始化之前让dependson的bean先实例化
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
@@ -334,14 +335,18 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
 				}
 
+				// 如果bean的原型模式，非单例，那么就不会缓存对象
 				else if (mbd.isPrototype()) {
 					// It's a prototype -> create a new instance.
 					Object prototypeInstance = null;
 					try {
+						// 创建bean对象前，将正在创建的beanName缓存，阻断循环依赖
 						beforePrototypeCreation(beanName);
+						// 创建bean对象，和单例时流程一样，只是不缓存
 						prototypeInstance = createBean(beanName, mbd, args);
 					}
 					finally {
+						// 从当前正在创建的容器中删除
 						afterPrototypeCreation(beanName);
 					}
 					bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
@@ -1056,6 +1061,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @see #isPrototypeCurrentlyInCreation
 	 */
 	@SuppressWarnings("unchecked")
+	/**
+	 * 如果当前线程没有缓存值，直接将当前beanName缓存
+	 * 如果已经缓存值，字符串类型，这将两个正在创建的beanName都缓存，容器转换为set
+	 * 如果不是string类型，那么说明是set容器，直接向里面放值
+	 */
 	protected void beforePrototypeCreation(String beanName) {
 		Object curVal = this.prototypesCurrentlyInCreation.get();
 		if (curVal == null) {
