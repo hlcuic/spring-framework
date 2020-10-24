@@ -140,7 +140,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 			throws BeansException {
 
 		super(parent);
-		// 初始化配置文件xml的位置（AbstractRefreshableConfigApplicationContext）
+		// 初始化配置文件xml的位置（类AbstractRefreshableConfigApplicationContext）
 		setConfigLocations(configLocations);
 		if (refresh) {
 			// spring容器启动的主流程

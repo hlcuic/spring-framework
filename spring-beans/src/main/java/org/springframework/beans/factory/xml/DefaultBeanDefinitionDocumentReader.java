@@ -93,7 +93,8 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	@Override
 	public void registerBeanDefinitions(Document doc, XmlReaderContext readerContext) {
 		this.readerContext = readerContext;
-		// 注册beanDefinition，将document中root元素传入
+		// 1：注册beanDefinition，在spring中doXxx方法才是真正干事的地方
+		// 2：将document中root根元素作为入参传入
 		doRegisterBeanDefinitions(doc.getDocumentElement());
 	}
 
@@ -146,7 +147,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			}
 		}
 
-		// 这里有两个钩子方法，典型的模板设计，由子类去实现
+		// 这里有两个钩子方法，典型的模板设计模式，由子类去实现
 		preProcessXml(root);
 		// 具体的解析document对象，注册beanDefinition的逻辑在这里实现
 		parseBeanDefinitions(root, this.delegate);
@@ -169,7 +170,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * @param root the DOM root element of the document
 	 */
 	protected void parseBeanDefinitions(Element root, BeanDefinitionParserDelegate delegate) {
-		//判断根元素的命名空间是否为空或者是 xmlns="http://www.springframework.org/schema/beans"
+		//判断是否默认命名空间 （根元素的命名空间是否为空或者是 xmlns="http://www.springframework.org/schema/beans"）
 		if (delegate.isDefaultNamespace(root)) {
 			NodeList nl = root.getChildNodes();
 			for (int i = 0; i < nl.getLength(); i++) {
@@ -177,7 +178,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					if (delegate.isDefaultNamespace(ele)) {
-						// 解析默认标签，例如：bean
+						// 解析默认标签，例如：bean,import,alias,beans
 						parseDefaultElement(ele, delegate);
 					}
 					else {

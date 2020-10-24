@@ -969,13 +969,18 @@ public class BeanDefinitionParserDelegate {
 		// 解析property元素上是否有ref或者value属性，
 		boolean hasRefAttribute = ele.hasAttribute(REF_ATTRIBUTE);
 		boolean hasValueAttribute = ele.hasAttribute(VALUE_ATTRIBUTE);
-		// 如果ref和value同时存在  或者 ref和subElement  或者 value与subElement ，都会报错
+
+		// 以下情况会报错：
+		// 1：ref和value同时存在
+		// 2：ref和subElement
+		// 3：value与subElement
 		if ((hasRefAttribute && hasValueAttribute) ||
 				((hasRefAttribute || hasValueAttribute) && subElement != null)) {
 			error(elementName +
 					" is only allowed to contain either 'ref' attribute OR 'value' attribute OR sub-element", ele);
 		}
 
+		// ref元素存在的情况
 		if (hasRefAttribute) {
 			String refName = ele.getAttribute(REF_ATTRIBUTE);
 			if (!StringUtils.hasText(refName)) {
@@ -985,12 +990,14 @@ public class BeanDefinitionParserDelegate {
 			ref.setSource(extractSource(ele));
 			return ref;
 		}
+		// value元素存在的情况
 		else if (hasValueAttribute) {
 			// 将value值封装到valueHolder对象上
 			TypedStringValue valueHolder = new TypedStringValue(ele.getAttribute(VALUE_ATTRIBUTE));
 			valueHolder.setSource(extractSource(ele));
 			return valueHolder;
 		}
+		// 子元素存在的情况
 		else if (subElement != null) {
 			// 解析子元素
 			return parsePropertySubElement(subElement, bd);
