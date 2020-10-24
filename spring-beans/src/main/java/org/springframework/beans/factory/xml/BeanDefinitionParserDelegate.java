@@ -710,6 +710,7 @@ public class BeanDefinitionParserDelegate {
 
 	/**
 	 * Parse constructor-arg sub-elements of the given bean element.
+	 * 解析bean元素下的constructor-args子元素
 	 */
 	public void parseConstructorArgElements(Element beanEle, BeanDefinition bd) {
 		NodeList nl = beanEle.getChildNodes();
@@ -724,6 +725,7 @@ public class BeanDefinitionParserDelegate {
 
 	/**
 	 * Parse property sub-elements of the given bean element.
+	 * 解析bean元素下的property子元素
 	 */
 	public void parsePropertyElements(Element beanEle, BeanDefinition bd) {
 		NodeList nl = beanEle.getChildNodes();
@@ -800,12 +802,13 @@ public class BeanDefinitionParserDelegate {
 
 	/**
 	 * Parse a constructor-arg element.
+	 * 解析constructor-arg子元素
 	 */
 	public void parseConstructorArgElement(Element ele, BeanDefinition bd) {
 		String indexAttr = ele.getAttribute(INDEX_ATTRIBUTE);
 		String typeAttr = ele.getAttribute(TYPE_ATTRIBUTE);
 		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
-		// 如果包含index属性
+		// 如果包含index下标属性
 		if (StringUtils.hasLength(indexAttr)) {
 			try {
 				int index = Integer.parseInt(indexAttr);
@@ -867,6 +870,7 @@ public class BeanDefinitionParserDelegate {
 
 	/**
 	 * Parse a property element.
+	 * 解析property元素
 	 */
 	public void parsePropertyElement(Element ele, BeanDefinition bd) {
 		String propertyName = ele.getAttribute(NAME_ATTRIBUTE);
@@ -950,6 +954,7 @@ public class BeanDefinitionParserDelegate {
 				"<constructor-arg> element");
 
 		// Should only have one child element: ref, value, list, etc.
+		// 无论是ref，还是value，还是子元素只能存在一个
 		NodeList nl = ele.getChildNodes();
 		Element subElement = null;
 		for (int i = 0; i < nl.getLength(); i++) {
@@ -966,7 +971,7 @@ public class BeanDefinitionParserDelegate {
 			}
 		}
 
-		// 解析property元素上是否有ref或者value属性，
+		// 解析property元素上是否有ref或者value属性
 		boolean hasRefAttribute = ele.hasAttribute(REF_ATTRIBUTE);
 		boolean hasValueAttribute = ele.hasAttribute(VALUE_ATTRIBUTE);
 
@@ -1021,11 +1026,18 @@ public class BeanDefinitionParserDelegate {
 	 * @param defaultValueType the default type (class name) for any
 	 * {@code <value>} tag that might be created
 	 */
+
+	/**
+	 * 1：可以是property元素下的子元素，也可以是construct-args元素下的
+	 * 2：子元素可以是value，ref，list，map，set,bean等等
+	 */
 	@Nullable
 	public Object parsePropertySubElement(Element ele, @Nullable BeanDefinition bd, @Nullable String defaultValueType) {
+		// 不是默认命名空间，解析自定义标签
 		if (!isDefaultNamespace(ele)) {
 			return parseNestedCustomElement(ele, bd);
 		}
+		// bean元素
 		else if (nodeNameEquals(ele, BEAN_ELEMENT)) {
 			BeanDefinitionHolder nestedBd = parseBeanDefinitionElement(ele, bd);
 			if (nestedBd != null) {
@@ -1033,6 +1045,7 @@ public class BeanDefinitionParserDelegate {
 			}
 			return nestedBd;
 		}
+		// ref元素
 		else if (nodeNameEquals(ele, REF_ELEMENT)) {
 			// A generic reference to any name of any bean.
 			String refName = ele.getAttribute(BEAN_REF_ATTRIBUTE);
@@ -1054,12 +1067,15 @@ public class BeanDefinitionParserDelegate {
 			ref.setSource(extractSource(ele));
 			return ref;
 		}
+		// idref元素
 		else if (nodeNameEquals(ele, IDREF_ELEMENT)) {
 			return parseIdRefElement(ele);
 		}
+		// value元素
 		else if (nodeNameEquals(ele, VALUE_ELEMENT)) {
 			return parseValueElement(ele, defaultValueType);
 		}
+		// null元素
 		else if (nodeNameEquals(ele, NULL_ELEMENT)) {
 			// It's a distinguished null value. Let's wrap it in a TypedStringValue
 			// object in order to preserve the source location.
@@ -1067,18 +1083,23 @@ public class BeanDefinitionParserDelegate {
 			nullHolder.setSource(extractSource(ele));
 			return nullHolder;
 		}
+		// array元素
 		else if (nodeNameEquals(ele, ARRAY_ELEMENT)) {
 			return parseArrayElement(ele, bd);
 		}
+		// list元素
 		else if (nodeNameEquals(ele, LIST_ELEMENT)) {
 			return parseListElement(ele, bd);
 		}
+		// set元素
 		else if (nodeNameEquals(ele, SET_ELEMENT)) {
 			return parseSetElement(ele, bd);
 		}
+		// map元素
 		else if (nodeNameEquals(ele, MAP_ELEMENT)) {
 			return parseMapElement(ele, bd);
 		}
+		// props元素
 		else if (nodeNameEquals(ele, PROPS_ELEMENT)) {
 			return parsePropsElement(ele);
 		}
