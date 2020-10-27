@@ -753,8 +753,9 @@ public class BeanDefinitionParserDelegate {
 
 	/**
 	 * Parse lookup-override sub-elements of the given bean element.
-	 * 如果是lookup-method子标签，解析methodName,beanRef 然后封装到LookupOverride对象中，
-	 * 然后放到overrides集合中，这个overrides集合是AbstractBeanDefinition的一个属性
+	 * 1：从lookup-method解析name,bean
+	 * 2：然后封装到LookupOverride对象中
+	 * 3：然后放到overrides集合中，这个overrides集合是AbstractBeanDefinition的一个属性
 	 */
 	public void parseLookupOverrideSubElements(Element beanEle, MethodOverrides overrides) {
 		NodeList nl = beanEle.getChildNodes();
